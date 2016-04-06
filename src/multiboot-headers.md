@@ -84,7 +84,7 @@ A drive is ‘bootable’ if it contains software that can finish the booting
 process. In the BIOS menu you can usually change in what order the BIOS looks
 for bootable drives or tell it to boot from a specific drive.
 
-The BIOS knows it's found a bootable drive by looking at the first few kilobytes
+The BIOS knows it has found a bootable drive by looking at the first few kilobytes
 of the drive and looking for some magical numbers set in that drive's
 memory. This won't be the last time some magical numbers or hacky sounding things
 are used on our way to building an OS. Such is life at such a low level...
@@ -305,11 +305,11 @@ from a big number. `dd` then puts that value into this spot in our file.
 > In other words:
 >
 > `checksum` + `magic_number` + `architecture` + `header_length` = 0
-> 
+>
 > We could try and "solve for" `checksum` like so:
-> 
+>
 > `checksum` =  -(`magic_number` + `architecture` + `header_length`)
-> 
+>
 > But here's where it gets weird. Computers don't have an innate concept of negative numbers. Normally we get around this by using "signed integers", which is something we [cover in an appendix](http://intermezzos.github.io/book/appendix/signed-and-unsigned.html). The point is we have an unsigned integer here, which means we're limited to representing only positive numbers. This means we can't literally represent -(`magic_number` + `architecture` + `header_length`) in our field.
 >
 > If you look closely at the spec you'll notice it's strangely worded: it's asking for a value that when added other values has a sum of zero. It's worded this way because integers have a limit to the size of numbers they can represent, and when you go over that size, the values wrap back around to zero. So 0xFFFFFFFF + 1 is.... 0x00000000. This is a hardware limitation: technically it's doing the addition correctly, giving us the 33-bit value 0x100000000, but we only have 32 bits to store things in so it can't actually tell us about that `1` in the most significant digit position! We're left with the rest of the digits, which spell out zero.
